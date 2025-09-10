@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡 - N</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body {margin:0; font-family:sans-serif; background:#f6f9ff; overflow:hidden;}
+  h1 {position:fixed; top:10px; left:50%; transform:translateX(-50%); margin:0;}
+  #score {position:fixed; top:120px; left:18%; transform:translateX(-50%); font-size:50px;}
+  #score2 {position:fixed; top:120px; left:45%; transform:translateX(-50%); font-size:50px;}
+  #score3 {position:fixed; top:120px; left:80%; transform:translateX(-50%); font-size:50px;}
+  .balloon {
+    position:absolute;
+    bottom:-120px;
+    width:60px; height:80px;
+    border-radius:50% 50% 45% 55%/55% 55% 45% 45%;
+    cursor:pointer;
+    animation:float 6s linear forwards;
+  }
+  .balloon:after {
+    content:"";
+    position:absolute; bottom:-15px; left:28px;
+    width:4px; height:20px; background:#555;
+  }
+  @keyframes float {
+    0% {bottom:-120px;}
+    100% {bottom:110vh;}
+  }
+  #message {
+    position:fixed; top:30%; left:50%; transform:translate(-50%,-50%);
+    background:#fff; padding:20px 30px; border-radius:12px; 
+    box-shadow:0 8px 20px rgba(0,0,0,.2); display:block; font-size:1.4rem;
+
+  }
+
+img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1000px;
+  border: 1px solid black;
+  display:none
+}
+  
+</style>
+</head>
+<body>
+  <h1>🎂 Klik Balon Ulang Tahun 🎂</h1>
+  <div id="score"></div>
+  <div id="score2"></div>
+  <div id="score3"></div>
+  <div id="message">Yeeyy! Screenshot kupon ini atau kasih liat ke fiqri</div>
+<img id="kupon" src="kupon1.png" class="imgcenter">
+
+<script>
+const colors=["#ff6b6b","#ffd93d","#6bcb77","#4d96ff","#f15bb5"];
+let score=0;
+let score2=0;
+let score3=1990;
+const scoreEl=document.getElementById("score");
+const scoreEl2=document.getElementById("score2");
+const scoreEl3=document.getElementById("score3");
+const message=document.getElementById("message");
+const kupon=document.getElementById("kupon");
+
+function createBalloon(){
+  const balloon=document.createElement("div");
+  balloon.className="balloon";
+  balloon.style.left=Math.random()*90+"vw";
+  balloon.style.background=colors[Math.floor(Math.random()*colors.length)];
+  document.body.appendChild(balloon);
+
+  balloon.addEventListener("click",()=>{
+    balloon.remove();
+    if (score == 0){
+      score++;
+      scoreEl.textContent=score;
+    }else if(score==1 && score2<10){
+      score2++;
+      if (score2==1){
+        var bulan = 'Januari'
+      }else if(score2==2){
+        var bulan = 'Februari'
+      }else if(score2==3){
+        var bulan = 'Maret'
+      }else if(score2==4){
+        var bulan = 'April'
+      }else if(score2==5){
+        var bulan = 'Mei'
+      }else if(score2==6){
+        var bulan = 'Juni'
+      }else if(score2==7){
+        var bulan = 'Juli'
+      }else if(score2==8){
+        var bulan = 'Agustus'
+      }else if(score2==9){
+        var bulan = 'September'
+      }else if(score2==10){
+        var bulan = 'Oktober'
+      }
+      scoreEl2.textContent=bulan;
+    }else if(score2==10 && score3<=2000){
+      score3++;
+      scoreEl3.textContent=score3;
+    }
+
+    if (score3==2001){
+      message.style.display="block";
+      kupon.style.display="block";
+      clearInterval(myinterfval)
+    }
+  });
+
+  balloon.addEventListener("animationend",()=> balloon.remove());
+}
+
+myinterfval = setInterval(createBalloon,600);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡 - M</title>
+<style>
+  :root{
+    --bg: #f3f6fb;
+    --card: #ffffff;
+    --accent: #ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,var(--bg),#ffffff);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .wrap{width:min(960px,96vw);background:var(--card);border-radius:16px;padding:18px;box-shadow:0 12px 40px rgba(20,30,50,.08)}
+  header{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px}
+  h1{font-size:1.2rem;margin:0}
+  .controls{display:flex;gap:8px}
+  button{background:transparent;border:1px solid #e6e9f0;padding:8px 12px;border-radius:10px;cursor:pointer}
+  button.primary{background:var(--accent);color:#fff;border-color:transparent}
+  .board-wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:center}
+  /* puzzle container */
+  .puzzle{width:360px;height:360px;display:grid;grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr);gap:6px;background:linear-gradient(180deg,#fff,#fafaff);padding:6px;border-radius:12px}
+  .piece{
+    user-select:none;
+    touch-action:manipulation;
+    border-radius:8px;
+    background-size: calc(100% * var(--cols)) calc(100% * var(--rows));
+    background-repeat:no-repeat;
+    cursor:grab;
+    box-shadow:0 6px 16px rgba(20,30,60,.08);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:transparent;
+    transition:transform .12s ease;
+  }
+  .piece.dragging{opacity:.85;transform:scale(1.03);cursor:grabbing;z-index:50}
+  .piece.correct{outline:3px solid rgba(0,200,100,.12)}
+  .msg{flex:1;padding:8px}
+  .status{margin-top:12px;text-align:center}
+  .congrats{display:none;padding:12px;border-radius:10px;background:linear-gradient(90deg,#fff6f6,#fff);box-shadow:0 6px 18px rgba(255,100,100,.06)}
+  .congrats.show{display:block}
+  /* simple confetti pieces */
+  .confetti{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:9999}
+  .confetti i{position:absolute;width:10px;height:14px;transform-origin:center;animation:fall 1.6s linear forwards;opacity:0.95}
+  @keyframes fall{
+    0%{transform:translateY(-20vh) rotate(0) scale(.8)}
+    100%{transform:translateY(110vh) rotate(720deg) scale(1)}
+  }
+  /* responsive */
+  @media (max-width:560px){
+    .board-wrap{flex-direction:column}
+    .puzzle{width:86vw;height:86vw}
+  }
+
+   img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1000px;
+  border: 1px solid black;
+  display:none
+}
+</style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="Puzzle ucapan">
+    <header>
+      <h1>Ayo teteh Nazmi selesain puzzle ini buat ke tahap berikutnya yaa sayaang hehe 🎉</h1>
+      <!-- <div class="controls">
+        <label for="size">Ukuran:</label>
+        <select id="size" aria-label="Pilih ukuran puzzle">
+          <option value="2">2 × 2</option>
+          <option value="3" selected>3 × 3</option>
+          <option value="4"selected>4 × 4</option>
+        </select>
+      </div> -->
+         <!-- <button id="shuffleBtn" class="primary">Acak</button>
+         <button id="resetBtn">Reset</button> -->
+    </header>
+
+    <div class="board-wrap">
+      <div class="puzzle" id="puzzle" style="--rows:3;--cols:3" aria-label="Grid puzzle"></div>
+
+      <div class="msg" aria-live="polite">
+        <div class="congrats" id="congrats">
+          <strong id="celebrateText">Selamat! 🎉</strong>
+          <div id="finalMessage" style="margin-top:8px">Semoga hari ulang tahunmu penuh kebahagiaan — dari aku yang selalu sayang.</div>
+        </div>
+
+        <div class="status" id="status">Semangaaaaaaatttttt!!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+  
+  <img id="kupon" src="kupon4.png" class="imgcenter">
+
+<script>
+/*
+  Puzzle Ucapan
+  - Ganti IMAGE_URL untuk menggunakan gambar sendiri
+  - MESSAGE di bagian congratulation bisa diubah juga
+*/
+
+const IMAGE_URL = 'princess.jpg'; // ganti sesuai kebutuhan
+const MESSAGE = 'Selamat Ulang Tahun! Semoga hari ini indah dan penuh senyum.';
+
+const puzzleEl = document.getElementById('puzzle');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const resetBtn = document.getElementById('resetBtn');
+const sizeSelect = '4';
+const status = document.getElementById('status');
+const congrats = document.getElementById('congrats');
+const finalMessage = document.getElementById('finalMessage');
+finalMessage.textContent = MESSAGE;
+const confettiEl = document.getElementById('confetti');
+
+let rows = 3, cols = 3;
+let pieces = []; // array of piece objects {index, el, correctIndex}
+
+function createPieces(){
+  puzzleEl.innerHTML = '';
+  puzzleEl.style.setProperty('--rows', rows);
+  puzzleEl.style.setProperty('--cols', cols);
+  pieces = [];
+  const total = rows * cols;
+
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const index = r*cols + c;
+      const piece = document.createElement('div');
+      piece.className = 'piece';
+      piece.dataset.index = index; // current position index in grid
+      piece.dataset.correct = index; // correct index
+      // background position calculations
+      piece.style.backgroundImage = `url("${IMAGE_URL}")`;
+      piece.style.backgroundPosition = `${(c/(cols-1))*100}% ${(r/(rows-1))*100}%`;
+      // make background-size proportional to grid
+      piece.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+      piece.style.width = '100%'; piece.style.height = '100%';
+      // store element
+      pieces.push({index, el: piece, correctIndex: index});
+      puzzleEl.appendChild(piece);
+    }
+  }
+}
+
+// drag & swap logic (works on desktop & touch)
+let draggingEl = null;
+
+function onPointerDown(e){
+  const target = e.currentTarget;
+  draggingEl = target;
+  target.setPointerCapture(e.pointerId);
+  target.classList.add('dragging');
+  // store initial position for simple visual lift
+  this._startX = e.clientX; this._startY = e.clientY;
+}
+function onPointerMove(e){
+  // optional: could move element with pointer; we keep simple swap-on-drop UX
+}
+function onPointerUp(e){
+  const from = draggingEl;
+  if(!from) return;
+  from.classList.remove('dragging');
+  // locate element at pointer
+  const elemAt = document.elementFromPoint(e.clientX, e.clientY);
+  const target = findAncestorPiece(elemAt);
+  if(target && target !== from){
+    swapPieces(from, target);
+  }
+  draggingEl = null;
+  checkSolved();
+}
+
+function findAncestorPiece(node){
+  while(node && node !== puzzleEl){
+    if(node.classList && node.classList.contains('piece')) return node;
+    node = node.parentNode;
+  }
+  return null;
+}
+
+function swapPieces(a,b){
+  // swap dataset.index (positions) and swap DOM nodes to reflect grid order
+  const aIndex = parseInt(a.dataset.index,10);
+  const bIndex = parseInt(b.dataset.index,10);
+  a.dataset.index = bIndex;
+  b.dataset.index = aIndex;
+
+  // swap nodes in DOM by replacing
+  const aNext = a.nextSibling === b ? a : a.nextSibling;
+  const bNext = b.nextSibling === a ? b : b.nextSibling;
+  puzzleEl.insertBefore(a, bNext);
+  puzzleEl.insertBefore(b, aNext);
+
+  // update pieces array order to match DOM order
+  refreshPieces();
+}
+
+function refreshPieces(){
+  const domPieces = Array.from(puzzleEl.querySelectorAll('.piece'));
+  domPieces.forEach((el, i) => {
+    el.dataset.index = i;
+  });
+}
+
+function shuffle(){
+  // Fisher-Yates on DOM nodes
+  const nodes = Array.from(puzzleEl.children);
+  for(let i = nodes.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    if(i === j) continue;
+    puzzleEl.insertBefore(nodes[j], nodes[i]);
+    // refresh node list
+    const tmp = nodes[i]; nodes[i] = nodes[j]; nodes[j] = tmp;
+  }
+  // update dataset.index
+  refreshPieces();
+  // also randomize by swapping background positions among pieces so puzzle not accidentally solved
+  // but easier: keep background same; shuffle positions enough.
+  // mark correct highlights off
+  Array.from(puzzleEl.children).forEach(el => el.classList.remove('correct'));
+  congrats.classList.remove('show');
+  status.textContent = 'Cara mainnya drag & drop keping gambarnya yaa sayaang';
+}
+
+function reset(){
+  // rebuild in correct order
+  createPieces();
+  wirePieces();
+  congrats.classList.remove('show');
+  status.textContent = '';
+}
+
+function checkSolved(){
+  const domPieces = Array.from(puzzleEl.querySelectorAll('.piece'));
+  let allCorrect = true;
+  domPieces.forEach((el, pos) => {
+    const correct = parseInt(el.dataset.correct,10);
+    if(pos === correct){
+      el.classList.add('correct');
+    } else {
+      el.classList.remove('correct');
+      allCorrect = false;
+    }
+  });
+  if(allCorrect){
+    onSolved();
+  }
+}
+
+function onSolved(){
+  status.textContent = '✅ Berhasil — Puzzle tersusun!';
+  congrats.classList.add('show');
+  triggerConfetti();
+  document.getElementById("kupon").style.display = "block";
+}
+
+// make some ephemeral confetti pieces
+function triggerConfetti(){
+  confettiEl.innerHTML = '';
+  const count = 30;
+  for(let i=0;i<count;i++){
+    const el = document.createElement('i');
+    const left = Math.random()*100;
+    el.style.left = left + 'vw';
+    el.style.top = (Math.random()*-20) + 'vh';
+    el.style.background = randomColor();
+    el.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+    el.style.animationDelay = (Math.random()*0.4) + 's';
+    el.style.opacity = 0.95;
+    confettiEl.appendChild(el);
+  }
+  // remove after animation
+  setTimeout(()=> confettiEl.innerHTML = '', 2000);
+}
+function randomColor(){
+  const palette = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#9B5DE5','#F15BB5'];
+  return palette[Math.floor(Math.random()*palette.length)];
+}
+
+function wirePieces(){
+  // pointer events binding
+  const domPieces = Array.from(puzzleEl.querySelectorAll('.piece'));
+  domPieces.forEach(p => {
+    // ensure element has correct dataset.correct based on initial background mapping
+    // we set correct earlier during creation, but after shuffle DOM order changes.
+    // keep correct tag intact.
+    p.addEventListener('pointerdown', onPointerDown);
+    p.addEventListener('pointermove', onPointerMove);
+    p.addEventListener('pointerup', onPointerUp);
+    p.addEventListener('pointercancel', onPointerUp);
+    // prevent default image drag ghost
+    p.addEventListener('dragstart', e=> e.preventDefault());
+  });
+}
+
+async function init(){
+  // initial build
+  createPieces();
+  wirePieces();
+  // events
+  //shuffleBtn.addEventListener('click', shuffle);
+  //resetBtn.addEventListener('click', reset);
+  //sizeSelect.addEventListener('change', e => {
+    const val = parseInt(4,10);
+    rows = cols = val;
+    reset()
+   // await reset();
+  //});
+  // preload image then reset to ensure background-size works nicely
+  const img = new Image();
+  img.onload = () => shuffle();
+  img.src = IMAGE_URL;
+}
+
+// initialize
+init();
+</script>
+</body>
+</html>

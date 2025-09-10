@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡</title>
+  <style>
+    :root{--bg:#f3f6fb;--card:#ffffff;--accent:#2563eb;--muted:#6b7280}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(180deg,var(--bg),#eef2ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card{
+      width:320px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(16,24,40,0.08);
+      padding:24px;
+      text-align:center;
+    }
+    h1{margin:0 0 12px;font-size:18px}
+    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
+    form{display:flex;flex-direction:column;gap:12px}
+    .input-group{position:relative}
+    input[type="password"]{
+      width:100%;
+      padding:10px 40px 10px 12px;
+      border-radius:8px;
+      border:1px solid #e6e9ef;
+      font-size:14px;
+      outline:none;
+    }
+    input[type="password"]:focus{box-shadow:0 0 0 4px rgba(37,99,235,0.06);border-color:var(--accent)}
+    .toggle{
+      position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      background:none;border:0;padding:6px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--muted)
+    }
+    button.submit{
+      padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:white;font-weight:600;cursor:pointer;font-size:14px
+    }
+    .msg{font-size:13px;color:green;display:none}
+    .error{font-size:13px;color:#dc2626;display:none}
+    footer{margin-top:12px;font-size:12px;color:var(--muted)}
+
+
+    /* Modal */
+.modal-overlay{
+position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);
+display:none;align-items:center;justify-content:center;
+}
+.modal{
+background:var(--card);
+padding:20px;
+border-radius:12px;
+width:300px;
+box-shadow:0 6px 20px rgba(0,0,0,0.2);
+text-align:center;
+}
+.modal h2{margin:0 0 10px;font-size:18px}
+.modal p{margin:0 0 20px;color:var(--muted);font-size:14px}
+.modal button{padding:8px 16px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Form masuk sederhana">
+    <h1>Masuk</h1>
+    <p class="lead">Masukkan kata sandinya sayaangg, kamu pasti bisaaa hihi</p>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="input-group">
+        <label for="password" class="sr-only" style="position:absolute;left:-9999px;">Kata sandi</label>
+        <input id="password" name="password" type="password" placeholder="Kata sandi" minlength="4" required />
+        <button type="button" class="toggle" id="toggleBtn" aria-pressed="false" aria-label="Tampilkan kata sandi">Tampil</button>
+      </div>
+
+      <button type="submit" class="submit">Masuk</button>
+    </form>
+
+    <div class="msg" id="successMsg" role="status">Berhasil masuk (demo).</div>
+    <div class="error" id="errorMsg">Kata sandi tidak boleh kosong.</div>
+
+    <footer>Fiqri © All Right Reserved For Only Nazmi</footer>
+  </div>
+
+
+  <!-- Modal -->
+<div class="modal-overlay" id="modal">
+<div class="modal">
+<h2>Berhasil Masuk!</h2>
+<p>Yeeeyy selamat sayaangg kamu berhasil. Selanjutnya kamu harus main games dulu buat dapetin kupon nanti ditukerin ke si piqri ganteng yaaa heheh </p>
+<a href="kartu_ucapan_interaktif.html" id="closeModal">Lanjuuuttt</a>
+</div>
+</div>
+
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const pwd = document.getElementById('password');
+    const toggle = document.getElementById('toggleBtn');
+    const success = document.getElementById('successMsg');
+    const error = document.getElementById('errorMsg');
+    const modal = document.getElementById('modal');
+const closeModal = document.getElementById('closeModal');
+
+    toggle.addEventListener('click', () => {
+      const isHidden = pwd.type === 'password';
+      pwd.type = isHidden ? 'text' : 'password';
+      toggle.textContent = isHidden ? 'Sembunyi' : 'Tampil';
+      toggle.setAttribute('aria-pressed', String(isHidden));
+      toggle.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      success.style.display = 'none';
+      error.style.display = 'none';
+      const value = pwd.value.trim();
+      if (!value) {
+        error.textContent = 'Kata sandi tidak boleh kosong.';
+        error.style.display = 'block';
+        pwd.focus();
+        return;
+      }
+      if (value == 'fiqrisayangnazmicelamanya4ever'){
+      // Demo: di sini bisa tambahkan validasi atau request ke server.
+      success.textContent = 'Berhasil masuk (demo).';
+      success.style.display = 'block';
+      modal.style.display = 'flex';
+      }else{
+        error.textContent = 'Salaahh passwordnya sayaaangg';
+        error.style.display = 'block';
+
+      }
+
+
+      // Clear input (opsional)
+      // pwd.value = '';
+    });
+
+    // UX: fokus pada field saat halaman dimuat
+    window.addEventListener('load', () => pwd.focus());
+  </script>
+</body>
+</html>

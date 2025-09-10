@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body,html{height:100%;scroll-behavior:smooth;font-family:sans-serif;color:#fff}
+
+    /* Parallax section */
+    .parallax{
+      height:100vh;
+      background-image:url('gondola-1.jpg'); /* ganti foto */
+      background-attachment:fixed;
+      background-position:bottom;
+      background-repeat:no-repeat;
+      background-size:cover;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+    }
+    .parallax h1{
+      font-size:3rem;
+      margin-bottom:20px;
+      text-shadow:0 2px 6px rgba(0,0,0,0.6);
+      animation:fadeInDown 1s ease forwards;
+    }
+    .parallax p{
+      font-size:1.2rem;
+      margin-bottom:30px;
+      text-shadow:0 2px 6px rgba(0,0,0,0.6);
+      animation:fadeIn 1.5s ease forwards;
+    }
+    .btn{
+      background:#2563eb;
+      color:#fff;
+      padding:14px 28px;
+      font-size:1rem;
+      border-radius:30px;
+      border:none;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:bold;
+      transition:all .3s ease;
+      animation:fadeInUp 2s ease forwards;
+    }
+    .btn:hover{background:#1d4ed8;transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+
+    /* Content section */
+    .content{
+      min-height:100vh;
+      padding:60px 20px;
+      background:#f9fafb;
+      color:#333;
+      text-align:center;
+    }
+    .content h2{font-size:2rem;margin-bottom:40px}
+
+    /* Timeline */
+    .timeline{
+      position:relative;
+      max-width:900px;
+      margin:0 auto;
+    }
+    .timeline::after{
+      content:'';position:absolute;width:4px;background:#2563eb;top:0;bottom:0;left:50%;margin-left:-2px;
+    }
+    .timeline-item{
+      padding:20px 40px;
+      position:relative;
+      width:50%;
+    }
+    .timeline-item::after{
+      content:'';position:absolute;width:20px;height:20px;right:-10px;background:#fff;border:4px solid #2563eb;top:30px;border-radius:50%;z-index:1;
+    }
+    .timeline-item.left{left:0;}
+    .timeline-item.right{left:50%;}
+    .timeline-item.right::after{left:-10px;}
+
+    .timeline-content{
+      background:#fff;
+      padding:20px;
+      border-radius:10px;
+      position:relative;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);
+      text-align:left;
+    }
+    .timeline-content h3{margin:0 0 10px;color:#2563eb}
+    .timeline-content p{margin:0 0 10px;color:#444;font-size:14px;line-height:1.5}
+
+    /* Foto */
+    .timeline-photo{
+      width:100%;
+      height:180px;
+      border-radius:8px;
+      overflow:hidden;
+      margin-top:12px;
+      border:3px solid #e5e7eb;
+    }
+    .timeline-photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    /* Responsive */
+    @media screen and (max-width:768px){
+      .timeline::after{left:31px;}
+      .timeline-item{width:100%;padding-left:70px;padding-right:25px}
+      .timeline-item.right{left:0}
+      .timeline-item::after{left:15px;}
+    }
+
+    /* Animations */
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+<body>
+
+  <section class="parallax">
+    <h1>Selamat Ulang Tahun, Nazmi Almutia 🧡🎉</h1>
+    <p>Sebagai apresiasi kamu sudah terlahir di dunia ini, aku akan challange kamu buat ikut permainan seru. Klik tombol di bawah atau scroll ke bawah buat lanjut ke permainan! Nanti setiap permainan jika berhasil dapet kupon buat ditukerin sama hadiaaahh yeeyy hihi. Good luckk sayaaangg !</p>
+    <a href="#about" class="btn">Lanjut Gaaasssss Mulai ! Kelamaan Lu Piqri Aing Mau Hadiaahh</a>
+  </section>
+
+  <section id="about" class="content">
+    <h2>Mari Kita Mulaaaiii, Nazmi !!</h2>
+    <h3>Klik Foto Kamu Yang Cantik Itu Yaaa</h3>
+    <div class="timeline">
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <h3><a href="minigame.html" >N</a></h3>
+          <p>Nafas cintamu adalah rumah bagi gelisahku, tempat aku ingin selalu pulang.</p>
+          <div class="timeline-photo">
+            <a href="minigame.html" ><img src="home2.jpg" alt="Si Cantik"></a>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <h3><a href="kuis_pg.html" >A</a></h3>
+          <p>Aduh lihat senyummu membuatku jadi salah tingkah.</p>
+          <div class="timeline-photo">
+            <a href="kuis_pg.html" ><img src="home3.jpg" alt="Loveeee"></a>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <h3><a href="puzzle.html" >Z</a></h3>
+          <p>Zat hidupku kini hanya terasa lengkap bila bersamamu.</p>
+          <div class="timeline-photo">
+            <a href="puzzle.html" ><img src="home4.jpg" alt="Pacarnya Fiqri"></a>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <h3><a href="birthday.html" >M</a></h3>
+          <p>Melihatmu bahagia saja sudah terisi duniaku.</p>
+          <div class="timeline-photo">
+            <a href="birthday.html" ><img src="home6.jpg" alt="Masya Allah"></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <h3>I</h3>
+          <p>Indah senyummu adalah cahaya bagi hidupku.</p>
+          <div class="timeline-photo">
+            <a href="send_message.html" ><img src="home5.jpg" alt="Cakep Beut"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

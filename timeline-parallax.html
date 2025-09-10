@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Timeline Kenangan — Parallax + Fade In</title>
+<style>
+  body {
+    margin:0;
+    font-family:system-ui,Segoe UI,Roboto;
+    background:#f6f8fc;
+    color:#222;
+    overflow-x:hidden;
+  }
+  header {
+    text-align:center;
+    padding:60px 20px;
+    background:linear-gradient(180deg,#6b96ff,#9fd3ff);
+    color:white;
+    position:sticky;
+    top:0;
+    z-index:100;
+  }
+  header h1 {margin:0;font-size:2rem;}
+  header p {margin:8px 0 0;}
+
+  .timeline {
+    position:relative;
+    width:100%;
+    max-width:960px;
+    margin:0 auto;
+    padding:60px 20px;
+  }
+
+  .item {
+    position:relative;
+    margin:80px 0;
+    width:80%;
+    max-width:600px;
+    padding:20px;
+    border-radius:16px;
+    background:white;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    opacity:0;
+    transform:translateY(40px);
+    transition:all 0.8s ease;
+  }
+
+  .item.show {
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .item:nth-child(even) {margin-left:auto;} /* kanan/kiri selang-seling */
+
+  .item img {
+    width:100%;
+    border-radius:12px;
+    display:block;
+    margin-bottom:12px;
+  }
+  .date {font-size:.85rem;color:#666;margin-bottom:6px;}
+  .title {font-weight:700;font-size:1.1rem;margin:6px 0;}
+  .desc {font-size:.95rem;line-height:1.4;}
+
+  /* garis timeline */
+  .line {
+    position:absolute;
+    top:0; left:50%;
+    width:4px;
+    height:100%;
+    background:linear-gradient(#6b96ff,#f15bb5);
+    transform:translateX(-50%);
+    z-index:-1;
+    border-radius:2px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>✨ Timeline Kenangan ✨</h1>
+    <p>Parallax lembut + animasi fade-in</p>
+  </header>
+
+  <div class="timeline" id="timeline">
+    <div class="line"></div>
+
+    <div class="item" data-speed="0.2">
+      <img src="https://picsum.photos/id/1015/800/500" alt="Kenangan 1">
+      <div class="date">14 Feb 2019</div>
+      <div class="title">Pertemuan Pertama</div>
+      <div class="desc">Di kafe kecil, kita ngobrol berjam-jam sampai lupa waktu.</div>
+    </div>
+
+    <div class="item" data-speed="0.4">
+      <img src="https://picsum.photos/id/1025/800/500" alt="Kenangan 2">
+      <div class="date">20 Jul 2020</div>
+      <div class="title">Liburan ke Pantai</div>
+      <div class="desc">Main pasir, kejar ombak, dan tertawa tanpa henti.</div>
+    </div>
+
+    <div class="item" data-speed="0.3">
+      <img src="https://picsum.photos/id/1037/800/500" alt="Kenangan 3">
+      <div class="date">05 Des 2022</div>
+      <div class="title">Malam Musik</div>
+      <div class="desc">Karaoke bareng sampai suara serak, tapi hati bahagia.</div>
+    </div>
+
+    <div class="item" data-speed="0.5">
+      <img src="https://picsum.photos/id/1045/800/500" alt="Kenangan 4">
+      <div class="date">10 Mar 2024</div>
+      <div class="title">Perjalanan Tak Terlupakan</div>
+      <div class="desc">Naik gunung bareng dan melihat sunrise yang indah.</div>
+    </div>
+  </div>
+
+<script>
+const items = document.querySelectorAll('.item');
+
+// parallax effect
+window.addEventListener('scroll', ()=>{
+  const scrollY = window.scrollY;
+  items.forEach(it=>{
+    const speed = parseFloat(it.dataset.speed || 0.3);
+    const offset = scrollY * speed;
+    it.style.transform = `translateY(${offset}px)`;
+    // kalau sudah show, tetap apply parallax dengan tambahan fade-in offset
+    if(it.classList.contains('show')){
+      it.style.transform = `translateY(${offset}px)`;
+    }
+  });
+});
+
+// fade-in with IntersectionObserver
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+},{threshold:0.2});
+
+items.forEach(it=> observer.observe(it));
+</script>
+</body>
+</html>

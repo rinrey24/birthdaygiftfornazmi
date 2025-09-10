@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡</title>
+<style>
+  body {
+    display:flex; justify-content:center; align-items:center;
+    height:100vh; margin:0;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    font-family:sans-serif;
+    overflow:hidden;
+  }
+  .card {
+    width:320px; height:220px;
+    perspective:1200px;
+    cursor:pointer;
+    position:relative;
+  }
+  .card-inner {
+    width:100%; height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 1s ease;
+  }
+  .card.open .card-inner {
+    transform:rotateX(180deg);
+  }
+  .card-face {
+    position:absolute; width:100%; height:100%;
+    backface-visibility:hidden;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    display:flex; justify-content:center; align-items:center;
+    text-align:center; padding:20px;
+  }
+  .card-front {
+    background:white;
+    font-size:1.4rem;
+    font-weight:bold;
+  }
+  .card-back {
+    background:#fffbe7;
+    transform:rotateX(180deg);
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+  }
+  .popup {
+    transform:scale(0.5) translateY(50px);
+    opacity:0;
+    transition:all 0.8s ease;
+  }
+  .card.open .popup {
+    transform:scale(1) translateY(0);
+    opacity:1;
+  }
+  .popup h2 {margin:0; color:#ff6b6b;}
+  .popup p {margin-top:10px;}
+  canvas {position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;}
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="card-inner">
+      <div class="card-face card-front">
+        🎂 Klik untuk buka 🎂
+      </div>
+      <div class="card-face card-back">
+        <div class="popup">
+          <h2>Selamat Ulang Tahun! 🎉</h2>
+          <p>Semoga hari-harimu penuh kebahagiaan, cinta, dan tawa 💖</p>
+        <a href="home_page.html" id="closeModal">Lanjuuuttt</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <canvas id="confetti"></canvas>
+
+<script>
+const card=document.getElementById("card");
+
+// klik buka kartu
+card.addEventListener("click", ()=>{
+  card.classList.toggle("open");
+  if(card.classList.contains("open")){
+    startConfetti();
+    setTimeout(stopConfetti,4000); // berhenti 4 detik
+  }
+});
+
+// confetti sederhana
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+let confetti=[],w,h,interval;
+
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);resize();
+
+function Confetto(){
+  this.x=Math.random()*w;
+  this.y=Math.random()*h-h;
+  this.r=Math.random()*6+4;
+  this.color=`hsl(${Math.random()*360},100%,50%)`;
+  this.speed=Math.random()*3+2;
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<confetti.length;i++){
+    let c=confetti[i];
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r,0,2*Math.PI);
+    ctx.fillStyle=c.color;
+    ctx.fill();
+    c.y+=c.speed;
+    if(c.y>h){c.y=-10; c.x=Math.random()*w;}
+  }
+}
+function startConfetti(){
+  confetti=[];
+  for(let i=0;i<150;i++) confetti.push(new Confetto());
+  clearInterval(interval);
+  interval=setInterval(draw,20);
+}
+function stopConfetti(){
+  clearInterval(interval);
+  ctx.clearRect(0,0,w,h);
+}
+</script>
+</body>
+</html>

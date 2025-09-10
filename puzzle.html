@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🧡 Happy Birhtday Nazmi Almutia 🧡 - A</title>
+<style>
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto;background:#f6f8fc;display:flex;flex-direction:column;align-items:center;padding:20px;min-height:100vh}
+  h1{margin:0 0 20px}
+  .board{display:grid;grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr);gap:4px;background:#ddd;padding:4px;border-radius:8px}
+  .slot{width:100px;height:100px;background:#fff;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;border-radius:6px}
+  .slot.filled{border-style:solid}
+  .pieces{margin-top:20px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .piece{width:100px;height:100px;background-size:calc(100% * var(--cols)) calc(100% * var(--rows));background-repeat:no-repeat;border-radius:6px;box-shadow:0 3px 8px rgba(0,0,0,.15);cursor:grab}
+  .hidden{display:none}
+  .msg{margin-top:20px;font-size:1.2rem;text-align:center;display:none;padding:10px;border-radius:8px;background:#fff0f5}
+  .msg.show{display:block}
+
+     img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1000px;
+  border: 1px solid black;
+  display:none
+}
+</style>
+</head>
+<body>
+  <h1>🎂 Puzzle - Drag to Slot 🎂</h1>
+
+  <div class="board" id="board" style="--rows:3;--cols:3"></div>
+
+  <div class="pieces" id="pieces"></div>
+
+  <div class="msg" id="message">Selamat Ulang Tahun! Semoga hari ini penuh senyum dan bahagia 🎉</div>
+  <img id="kupon" src="kupon3.png" class="imgcenter">
+
+<script>
+const IMAGE_URL = "puzzle1.jpg"; // ganti gambar sesuai kebutuhan
+const rows = 3, cols = 3;
+const board = document.getElementById("board");
+const piecesBox = document.getElementById("pieces");
+const message = document.getElementById("message");
+
+function init(){
+  // buat slot
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const slot = document.createElement("div");
+      slot.className = "slot";
+      slot.dataset.correct = r*cols + c;
+      slot.addEventListener("dragover", e => e.preventDefault());
+      slot.addEventListener("drop", onDrop);
+      board.appendChild(slot);
+    }
+  }
+  // buat potongan
+  let indices = [...Array(rows*cols).keys()];
+  shuffle(indices);
+  indices.forEach(i=>{
+    const piece = document.createElement("div");
+    piece.className="piece";
+    piece.draggable=true;
+    piece.dataset.correct=i;
+    const r=Math.floor(i/cols), c=i%cols;
+    piece.style.backgroundImage=`url(${IMAGE_URL})`;
+    piece.style.backgroundPosition=`${(c/(cols-1))*100}% ${(r/(rows-1))*100}%`;
+    piece.style.backgroundSize=`${cols*100}% ${rows*100}%`;
+    piece.addEventListener("dragstart", onDragStart);
+    piecesBox.appendChild(piece);
+  });
+}
+
+let dragged=null;
+function onDragStart(e){
+  dragged=e.target;
+}
+function onDrop(e){
+  const slot=e.currentTarget;
+  if(slot.classList.contains("filled")) return;
+  if(dragged){
+    // cek benar?
+    if(slot.dataset.correct===dragged.dataset.correct){
+      slot.appendChild(dragged);
+      slot.classList.add("filled");
+      dragged.draggable=false;
+      dragged.style.cursor="default";
+      checkWin();
+    }else{
+      // salah → kembali ke box
+      piecesBox.appendChild(dragged);
+    }
+  }
+}
+
+function checkWin(){
+  const slots=[...board.querySelectorAll(".slot")];
+  const done=slots.every(s=>s.classList.contains("filled"));
+  if(done){
+    message.classList.add("show");
+    document.getElementById("kupon").style.display = "block";
+  }
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+}
+
+init();
+</script>
+</body>
+</html>
