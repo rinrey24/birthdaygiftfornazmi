@@ -15,6 +15,10 @@
       display:flex;
       align-items:center;
       justify-content:center;
+        background-image: url('gondola-2.jpg'); /* Replace with your image path */
+    background-repeat: no-repeat; /* Optional: Prevents image from repeating */
+    background-size: cover; /* Optional: Scales image to cover the entire body */
+    background-position: center center; /* Optional: Centers the image */
     }
     .card{
       width:320px;
@@ -76,6 +80,7 @@ text-align:center;
       <div class="input-group">
         <label for="password" class="sr-only" style="position:absolute;left:-9999px;">Kata sandi</label>
         <input id="password" name="password" type="password" placeholder="Kata sandi" minlength="4" required />
+        <!-- <input id="counter" name="counter" type="text" value="0"/> -->
         <button type="button" class="toggle" id="toggleBtn" aria-pressed="false" aria-label="Tampilkan kata sandi">Tampil</button>
       </div>
 
@@ -107,6 +112,7 @@ text-align:center;
     const error = document.getElementById('errorMsg');
     const modal = document.getElementById('modal');
 const closeModal = document.getElementById('closeModal');
+var counter = 0;
 
     toggle.addEventListener('click', () => {
       const isHidden = pwd.type === 'password';
@@ -127,7 +133,9 @@ const closeModal = document.getElementById('closeModal');
         pwd.focus();
         return;
       }
-      if (value == 'fiqrisayangnazmicelamanya4ever'){
+      counter++;
+
+      if (value == '10oktober2001'){
       // Demo: di sini bisa tambahkan validasi atau request ke server.
       success.textContent = 'Berhasil masuk (demo).';
       success.style.display = 'block';
@@ -135,6 +143,18 @@ const closeModal = document.getElementById('closeModal');
       }else{
         error.textContent = 'Salaahh passwordnya sayaaangg';
         error.style.display = 'block';
+        if (counter == 3){
+        error.textContent = 'Ayooo apaa';
+        error.style.display = 'block';
+        }
+         if (counter >= 4){
+        error.textContent = 'hint: tanggal lahir kamu hehe';
+        error.style.display = 'block';
+        }
+         if (counter >= 6){
+        error.textContent = 'yaudah nih passwordnya = 10oktober2001';
+        error.style.display = 'block';
+        }
 
       }
 

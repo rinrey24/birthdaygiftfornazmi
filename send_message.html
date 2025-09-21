@@ -77,18 +77,24 @@
       <button type="submit">Submit</button>
     </form>
     <p class="success" id="successMsg">✅ Yg ini harus di screenshot ini yaa !</p>
+    <p id="finalMsg" style="display: none;">Yeeyy semuanya udah selesaaii!! Selamaatt kamu berhasil berhak mendapatkan hadiah nanti ditukerin pake kupon yang udah kamu screenshot atau kasih liat ke aku yaaa.</p>
+    <p id="finalMsg2" style="display: none;">Terima kasih yaa udah lahir di dunia ini, kamu sangat berarti buat aku. I LOVE YOUUUUU</p>
   </div>
 
-  <img id="kupon" src="kupon5.png" alt="Kupon Hadiah">
+  <img id="kupon" src="kupon5.png" alt="Kupon Hadiah" height="500" width="500">
 
   <script>
     const form = document.getElementById("messageForm");
     const successMsg = document.getElementById("successMsg");
     const kupon = document.getElementById("kupon");
+    const finalMsg = document.getElementById("finalMsg");
+    const finalMsg2 = document.getElementById("finalMsg2");
 
     form.addEventListener("submit", function(e) {
       e.preventDefault(); 
       successMsg.style.display = "block";
+      finalMsg.style.display = "block";
+      finalMsg2.style.display = "block";
       kupon.classList.add("show");
     });
   </script>

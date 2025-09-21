@@ -52,7 +52,7 @@ img {
   <div id="score"></div>
   <div id="score2"></div>
   <div id="score3"></div>
-  <div id="message">Yeeyy! Screenshot kupon ini atau kasih liat ke fiqri</div>
+  <div id="message">Yeeyy! Screenshot kupon ini atau kasih liat ke fiqri <a href="home_page.html#about">Back</a></div>
 <img id="kupon" src="kupon1.png" class="imgcenter">
 
 <script>
@@ -65,6 +65,7 @@ const scoreEl2=document.getElementById("score2");
 const scoreEl3=document.getElementById("score3");
 const message=document.getElementById("message");
 const kupon=document.getElementById("kupon");
+      message.style.display="none";
 
 function createBalloon(){
   const balloon=document.createElement("div");
