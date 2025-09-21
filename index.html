@@ -135,7 +135,7 @@ var counter = 0;
       }
       counter++;
 
-      if (value == '10oktober2001'){
+      if (value == '01oktober2001'){
       // Demo: di sini bisa tambahkan validasi atau request ke server.
       success.textContent = 'Berhasil masuk (demo).';
       success.style.display = 'block';
@@ -151,8 +151,12 @@ var counter = 0;
         error.textContent = 'hint: tanggal lahir kamu hehe';
         error.style.display = 'block';
         }
+         if (counter >= 5){
+        error.textContent = 'pakai nama bulan sayaang digabung';
+        error.style.display = 'block';
+        }
          if (counter >= 6){
-        error.textContent = 'yaudah nih passwordnya = 10oktober2001';
+        error.textContent = 'yaudah nih passwordnya = 01oktober2001';
         error.style.display = 'block';
         }
 
