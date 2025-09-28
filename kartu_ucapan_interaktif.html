@@ -13,7 +13,7 @@
     overflow:hidden;
   }
   .card {
-    width:320px; height:220px;
+    width:620px; height:420px;
     perspective:1200px;
     cursor:pointer;
     position:relative;
@@ -68,13 +68,23 @@
       </div>
       <div class="card-face card-back">
         <div class="popup">
-          <h2>Selamat Ulang Tahun! 🎉</h2>
-          <p>Semoga hari-harimu penuh kebahagiaan, cinta, dan tawa 💖</p>
+          <h2>🌸✨ Selamat Ulang Tahun, Nazmi Almutia ✨🌸 🎉</h2>
+          <p>
+Sayang, selamat ulang tahun yaa 💖
+Aku bersyukur banget punya kamu di hidupku. Kamu itu bukan cuma teman, atau pacar, tapi juga rumah buat hati aku.
+
+Semoga di umur kamu yang baru ini, semua hal baik datang ke kamu. Aku selalu doain biar langkah kamu dimudahin, harapan kamu tercapai, dan senyum kamu nggak pernah hilang. 🌹
+
+Terima kasih udah jadi bagian penting dalam hidup aku. Aku sayang banget sama kamu, lebih dari yang bisa aku tulis di kata-kata. 🎂💞</p>
         <a href="home_page.html" id="closeModal">Lanjuuuttt</a>
         </div>
       </div>
     </div>
   </div>
+<audio controls id="music"  style="display: none;" loop>
+
+  <source src="happy-birthday-to-you-piano-version-13976.mp3" type="audio/mpeg">
+</audio>
   <canvas id="confetti"></canvas>
 
 <script>
@@ -84,8 +94,9 @@ const card=document.getElementById("card");
 card.addEventListener("click", ()=>{
   card.classList.toggle("open");
   if(card.classList.contains("open")){
+  PlayMusic();
     startConfetti();
-    setTimeout(stopConfetti,4000); // berhenti 4 detik
+    //setTimeout(stopConfetti,4000); // berhenti 4 detik
   }
 });
 
@@ -121,13 +132,20 @@ function draw(){
 }
 function startConfetti(){
   confetti=[];
-  for(let i=0;i<150;i++) confetti.push(new Confetto());
+  for(let i=0;i<350;i++) confetti.push(new Confetto());
   clearInterval(interval);
   interval=setInterval(draw,20);
 }
 function stopConfetti(){
   clearInterval(interval);
   ctx.clearRect(0,0,w,h);
+}
+
+function PlayMusic() {
+
+  var play=document.getElementById("music");
+  play.volume = 0.2;
+  play.play();
 }
 </script>
 </body>
