@@ -71,9 +71,9 @@
 </head>
 <body>
   <div class="container">
-    <h2>Tulis Satu Kata Untuk Fiqri hihi</h2>
+    <h2>Tulis pesan dan doa buat diri kamu sendiri</h2>
     <form id="messageForm">
-      <textarea id="message" placeholder="Tulis..." rows="1" required></textarea>
+      <textarea id="message" placeholder="Tulis doa, pencapaian kamu kedepan, ataupun kata-kata untuk dirimu kamu sendiri di masa depan ataupun masa lalu" rows="5" required></textarea>
       <button type="submit">Submit</button>
     </form>
     <p class="success" id="successMsg">✅ Yg ini harus di screenshot ini yaa !</p>
@@ -96,6 +96,9 @@
       finalMsg.style.display = "block";
       finalMsg2.style.display = "block";
       kupon.classList.add("show");
+      var msg = document.getElementById("message").value;
+      var url = "https://wa.me/6282214646187/?text="+msg
+      window.open(url, '_blank').focus();
     });
   </script>
 </body>
