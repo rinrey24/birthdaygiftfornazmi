@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Onet-style Game Buat Nazmiii</title>
+  <style>
+    :root{
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --accent: #4f46e5;
+      --tile-size: 64px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:#0f172a}
+    .wrap{max-width:980px;margin:20px auto;padding:18px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:8px;align-items:center}
+    button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    button.ghost{background:transparent;color:var(--accent);border:1px solid rgba(79,70,229,0.12)}
+    .board-wrap{margin-top:14px;background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(15,23,42,0.06)}
+    .board{display:grid;gap:6px;justify-content:center}
+    .tile{width:var(--tile-size);height:var(--tile-size);background:#e6eefc;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;transition:transform .1s}
+    .tile img{max-width:100%;max-height:100%;display:block}
+    .tile.empty{background:transparent;cursor:default}
+    .tile.selected{outline:3px solid rgba(79,70,229,0.25);transform:scale(1.06)}
+    .tile.matched{visibility:hidden}
+    .status{display:flex;gap:12px;align-items:center;margin-left:8px}
+    .hint{font-size:13px;color:#475569}
+    .footer{margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+    .overlay{padding:12px;font-size:13px;color:#334155}
+    @media (max-width:600px){:root{--tile-size:48px} h1{font-size:16px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Onet gameeee</h1>
+        <div class="hint">Klik dua gambar yang sama. Gunakan tombol <b>Hint</b> jika buntu wkwkw.</div>
+      </div>
+      <div class="controls">
+        <div class="status">
+          <div>Skor: <span id="score">0</span></div>
+          <div>Waktu: <span id="time">00:00</span></div>
+        </div>
+        <button id="hintBtn">Hint</button>
+        <button id="shuffleBtn">Acak</button>
+        <button id="resetBtn" class="ghost">Reset</button>
+      </div>
+    </header>
+
+    <div class="board-wrap">
+      <div id="board" class="board"></div>
+      <div class="footer overlay">
+        <div id="message">Semangaaaaaaaaaaaat!</div>
+        <div>Hint Used: <span id="hint_used">0</span></div>
+        <!-- <div>Gunakan hint jika tidak ada pasangan tersisa.</div> -->
+      </div>
+    </div>
+  </div>
+
+<script>
+const rows = 6, cols = 8;
+const imageUrls = [
+      'onet1.jpg' ,
+  'onet2.jpg' ,
+  'onet3.jpg' ,
+  'onet4.jpg' ,
+  'onet5.jpg' ,
+  'onet6.jpg' ,
+  'onet7.jpg' ,
+  'onet8.jpg' ,
+  'home1.jpg' ,
+  'home2.jpg' ,
+  'home3.jpg' ,
+  'home4.jpg' ,
+  'home5.jpg' ,
+  'home6.jpg' ,
+  'home7.jpg' ,
+  'home8.jpg' ,
+  'home9.jpg' ,
+];
+//for(let i=1;i<=24;i++) imageUrls.push(`https://picsum.photos/seed/onet${i}/200`);
+
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+
+let grid, sel=null, score=0, startTime, timerInterval,hintused=0;
+const boardEl=document.getElementById('board'),scoreEl=document.getElementById('score'),timeEl=document.getElementById('time'),messageEl=document.getElementById('message');
+hintusedEl=document.getElementById('hint_used')
+
+document.getElementById('shuffleBtn').onclick=()=>{shuffleTiles();render();messageEl.textContent='Papan diacak ulang!'};
+document.getElementById('resetBtn').onclick=()=>{init();};
+document.getElementById('hintBtn').onclick=()=>{showHint();};
+
+function init(){
+  grid=generateTiles();sel=null;score=0;scoreEl.textContent=0;render();resetTimer();hintused=0;
+}
+function resetTimer(){
+  startTime=Date.now();if(timerInterval)clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);timeEl.textContent=formatTime(s)},500);
+}
+function formatTime(s){return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+
+function generateTiles(){
+  const pairCount=(rows*cols)/2;const imgs=[];
+  for(let i=0;i<pairCount;i++)imgs.push(imageUrls[i%imageUrls.length]);
+  const tiles=imgs.concat(imgs).map((url,i)=>({id:i+1,url}));shuffleArray(tiles);
+  const grid=Array.from({length:rows+2},()=>Array(cols+2).fill(null));
+  let t=0;for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)grid[r][c]=tiles[t++];return grid;
+}
+function shuffleTiles(){
+  const remaining=[];for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)if(grid[r][c])remaining.push(grid[r][c]);
+  shuffleArray(remaining);
+  let t=0;for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)if(grid[r][c])grid[r][c]=remaining[t++];
+}
+function render(){
+  boardEl.innerHTML='';boardEl.style.gridTemplateColumns=`repeat(${cols}, var(--tile-size))`;
+  for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++){
+    const cell=grid[r][c];const tile=document.createElement('div');tile.className='tile';tile.dataset.r=r;tile.dataset.c=c;
+    if(!cell){tile.classList.add('empty')}else{const img=document.createElement('img');img.src=cell.url;tile.appendChild(img);tile.onclick=onTileClick}
+    boardEl.appendChild(tile);
+  }
+}
+function onTileClick(e){const el=e.currentTarget;const r=+el.dataset.r,c=+el.dataset.c,cell=grid[r][c];if(!cell)return;
+  clearSelection();el.classList.add('selected');if(!sel){sel={r,c};return;}
+  if(sel.r===r&&sel.c===c){sel=null;clearSelection();return;}
+  const first=grid[sel.r][sel.c];
+  if(first.url===cell.url){if(canConnect(sel,{r,c})){grid[sel.r][sel.c]=grid[r][c]=null;score+=10;scoreEl.textContent=score;messageEl.textContent='Pasangan cocok! +10';setTimeout(()=>{render();checkWin()},200)}else{messageEl.textContent='Tidak bisa dihubungkan (lebih dari 2 belokan)';setTimeout(render,400)}}else{messageEl.textContent='Bukan pasangan.';setTimeout(render,300)}sel=null;}
+function clearSelection(){document.querySelectorAll('.tile.selected').forEach(t=>t.classList.remove('selected'))}
+function checkWin(){for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)if(grid[r][c])return;messageEl.textContent='Yeeeyy selamat, kamu menang!';alert('Yeeyy kamu menaaangg! Skor: ' +score+ '. Hint Used: '+hintused);clearInterval(timerInterval)}
+
+function canConnect(a,b){const H=rows+2,W=cols+2,dirs=[{dr:-1,dc:0},{dr:1,dc:0},{dr:0,dc:-1},{dr:0,dc:1}];
+  const free=(r,c)=>{if(r<0||c<0||r>=H||c>=W)return false;if(r===b.r&&c===b.c)return true;return!grid[r][c]};
+  const dist=Array.from({length:H},()=>Array.from({length:W},()=>Array(4).fill(Infinity))),deque=[];
+  for(let d=0;d<4;d++){const nr=a.r+dirs[d].dr,nc=a.c+dirs[d].dc;if(!free(nr,nc))continue;dist[nr][nc][d]=0;deque.unshift({r:nr,c:nc,d,turns:0})}
+  while(deque.length){const cur=deque.shift();if(cur.r===b.r&&cur.c===b.c&&cur.turns<=2)return true;
+    for(let nd=0;nd<4;nd++){const nr=cur.r+dirs[nd].dr,nc=cur.c+dirs[nd].dc;if(!free(nr,nc)&&!(nr===b.r&&nc===b.c))continue;const nt=cur.turns+(nd===cur.d?0:1);if(nt>2)continue;if(nt<dist[nr][nc][nd]){dist[nr][nc][nd]=nt;if(nd===cur.d)deque.unshift({r:nr,c:nc,d:nd,turns:nt});else deque.push({r:nr,c:nc,d:nd,turns:nt});}}}
+  return false;}
+
+function showHint(){
+  hintused+=1;hintusedEl.textContent=hintused
+  for(let r1=1;r1<=rows;r1++)for(let c1=1;c1<=cols;c1++){
+    const cell1=grid[r1][c1];if(!cell1)continue;
+    for(let r2=r1;r2<=rows;r2++)for(let c2=1;c2<=cols;c2++){
+      if(r1===r2&&c1===c2)continue;const cell2=grid[r2][c2];if(!cell2)continue;
+      if(cell1.url===cell2.url&&canConnect({r:r1,c:c1},{r:r2,c:c2})){
+        messageEl.textContent='Hint: ada pasangan yang bisa dihubungkan!';
+        highlightPair(r1,c1,r2,c2);return;}}}
+  messageEl.textContent='Tidak ada pasangan tersisa! Coba acak papan.';
+}
+function highlightPair(r1,c1,r2,c2){const tiles=document.querySelectorAll('.tile');tiles.forEach(t=>{const r=+t.dataset.r,c=+t.dataset.c;if((r===r1&&c===c1)||(r===r2&&c===c2))t.style.outline='3px solid red';else t.style.outline='none'});setTimeout(render,1000)}
+
+init();
+</script>
+</body>
+</html>
