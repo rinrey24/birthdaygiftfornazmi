@@ -129,7 +129,7 @@ function onTileClick(e){const el=e.currentTarget;const r=+el.dataset.r,c=+el.dat
   const first=grid[sel.r][sel.c];
   if(first.url===cell.url){if(canConnect(sel,{r,c})){grid[sel.r][sel.c]=grid[r][c]=null;score+=10;scoreEl.textContent=score;messageEl.textContent='Pasangan cocok! +10';setTimeout(()=>{render();checkWin()},200)}else{messageEl.textContent='Tidak bisa dihubungkan (lebih dari 2 belokan)';setTimeout(render,400)}}else{messageEl.textContent='Bukan pasangan.';setTimeout(render,300)}sel=null;}
 function clearSelection(){document.querySelectorAll('.tile.selected').forEach(t=>t.classList.remove('selected'))}
-function checkWin(){for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)if(grid[r][c])return;messageEl.textContent='Yeeeyy selamat, kamu menang!';alert('Yeeyy kamu menaaangg! Skor: ' +score+ '. Hint Used: '+hintused);clearInterval(timerInterval)}
+function checkWin(){for(let r=1;r<=rows;r++)for(let c=1;c<=cols;c++)if(grid[r][c])return;messageEl.textContent='Yeeeyy selamat, kamu menang!';alert('Yeeyy kamu menaaangg! Time: '+timeEl+'. Skor: ' +score+ '. Hint Used: '+hintused);clearInterval(timerInterval)}
 
 function canConnect(a,b){const H=rows+2,W=cols+2,dirs=[{dr:-1,dc:0},{dr:1,dc:0},{dr:0,dc:-1},{dr:0,dc:1}];
   const free=(r,c)=>{if(r<0||c<0||r>=H||c>=W)return false;if(r===b.r&&c===b.c)return true;return!grid[r][c]};
